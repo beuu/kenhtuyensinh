@@ -1,0 +1,18 @@
+#holder img{
+    width: 100px;
+    height: auto!important;
+}
+
+#holder{
+    width:100px;
+    height: auto!important;
+}
+.odd:hover{
+    color: black;
+    background-color: #e2c9c94f;
+}
+
+.even:hover{
+    color: black;
+    background-color: #e2c9c94f;
+}
