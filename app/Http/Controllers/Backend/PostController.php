@@ -10,13 +10,13 @@ use App\Repositories\Slug\SlugRepositoryInterface;
 use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Repositories\Tag\TagRepositoryInterface;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Post;
-use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use DB;
 use Yajra\DataTables\DataTables;
+use App\Http\Requests\Admin\Post\CreateRequest;
+use App\Http\Requests\Admin\Post\UpdateRequest;
 
 class PostController extends Controller
 {
@@ -53,7 +53,6 @@ class PostController extends Controller
                 $data = Post::query()->whereHas('cates', function ($query) use($datass){
                     $query->where('cate_id',$datass);
                 })->with('slugs')->get();
-                //dd($data);
                 return Datatables::of($data)
                     ->addIndexColumn()
                     ->addColumn('slug', function($row){
@@ -132,23 +131,11 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param CreateRequest $request
      * @return RedirectResponse
-     * @throws ValidationException
      */
-    public function store(Request $request)
+    public function store(CreateRequest $request)
     {
-        try {
-            $this->validate($request, [
-                'title' => 'required',
-                'slug' => 'required|unique:slugs',
-                'description' => 'required',
-                'image' => 'required',
-                'content' => 'required',
-
-            ]);
-        } catch (ValidationException $e) {
-        }
         $inputs = $request->except(['_token','slug','type']);
         $inputs['uid'] = Auth::id();
         $request->index_seo == NULL ? ($inputs['index_seo'] = 0) : ($inputs['index_seo'] = 1);
@@ -159,7 +146,6 @@ class PostController extends Controller
             'type'=>$request->type,
             'refid'=>$data->id
         ]);
-
         $data->tag()->sync($request->input('tag'));
         $data->cates()->sync((array)$request->input('cate'));
         if($idSlugs->wasRecentlyCreated === false){
@@ -199,35 +185,26 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
+     * @param UpdateRequest $request
      * @param int $id
      * @return RedirectResponse
-     * @throws ValidationException
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRequest $request, $id)
     {
-
-        //dd($request->index_seo);
         $data = $this->repoPost->find($id);
         $slug = $this->repoSlug->where('refid',$id);
-        $this->validate($request, [
-            'title' => 'required',
-            'slug' => 'required|unique:slugs,slug,'.$slug->id  ,
-            'description' => 'required',
-            'image'=>'required',
-            'body'=>'required',
-            'cate.*' => 'exists:categories,id',
-            'tag.*' => 'exists:tags,id',
-        ]);
-        $inputs = $request->except('slug','_token','_method','tag','type','cate');
+        $rslug = $request->only('slug','type');
+        $rslug['refid'] = $id;
+        $inputs = $request->except('slug','slugs','_token','_method','tag','type','cate');
         $request->index_seo == NULL ? ($inputs['index_seo'] = 0) : ($inputs['index_seo'] = 1);
         $request->public == NULL ? ($inputs['public'] = 0) : ($inputs['public'] = 1);
         $this->repoPost->update($id,$inputs);
-        $slug->updateOrCreate([
-            'slug'=>$request->slug,
-            'type'=>$request->type,
-            'refid'=>$id
-        ]);
+        if ($slug->slug != $request->slug){
+            $data->slugs()->delete();
+            $this->repoSlug->create($rslug);
+        }else {
+            $this->repoSlug->update($slug->id,$rslug);
+        }
         $data->tag()->sync((array)$request->input('tag'));
         $data->cates()->sync((array)$request->input('cate'));
         return redirect()->back()

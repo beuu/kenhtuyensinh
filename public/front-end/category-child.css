@@ -1,0 +1,33 @@
+/*! CSS Used from: https://timviec365.vn/css/blog.css?v=150 */
+.item h3{margin:0;padding:0;}
+.left-main{padding:0;}
+.item .date{font-family:Roboto, sans-serif;}
+.date .tg::before{content:"";display:inline-block;width:8px;height:16px;background:url('./bg-img/ic-tg.png') bottom left no-repeat;margin-right:4px;color:#AAAAAA;}
+.date .day::before{content:"";display:inline-block;width:14px;height:16px;line-height:20px;background:url('./bg-img/ic-date.png') bottom left no-repeat;margin-right:0px;color:#AAAAAA;margin-bottom:-1.4px;}
+.item .date .tg{margin-right:4px!important;}
+.item .date a,.item .date .day,.date .tg{color:#AAAAAA;font-size:12px;line-height:12px;text-transform:unset;}
+.item .title a{font-weight:bold;font-size:14px;line-height:16px;color:#004175;overflow:hidden;text-overflow:ellipsis;-webkit-line-clamp:2;display:-webkit-box;-webkit-box-orient:vertical;margin-top:8px;font-family:roboto,sans-serif;text-align:justify;}
+.left-main .item-04{float:left;width:100%;}
+.left-main .item-04 img{width:100%;}
+.box_right .box_see_2{float:left;width:100%;text-align:center;color:#4c5bd4;margin-bottom:10px;}
+.group-item .item-04{padding:0;}
+.col-md-4{padding:0;}
+.group-item .info{float:left;width:100%;}
+article img{float:left;width:100%;height:100%;border-radius:5px;}
+.top_right{float:left;width:100%;margin-top:3px;border-bottom:3px dotted #171616;margin-bottom:16.5px;}
+.top_cn{background:#004175;height:34px;border-top-left-radius:5px;border-top-right-radius:5px;color:#ffffff;font-weight:bold;font-size:16px;line-height:19px;text-align:center;text-transform:uppercase;margin-bottom:-3px;}
+.top_cn p{padding-top:8px;}
+.container{max-width:1172px;padding:0!important;}
+.group-item .tt_h{margin-bottom:40px;}
+.box_right{flex:auto;width:100%;float:right;padding:0;}
+.main_right .item-20{float:left;width:100%;margin-bottom:12px;display:block;}
+.main_right{float:left;width:100%;margin-bottom:15px;}
+.main_right a{float:left;width:100%!important;height:auto;padding-left:1px;font-family:Roboto, sans-serif;font-style:normal;font-weight:normal;font-size:16px;line-height:18px;color:#171616;}
+.row3 .row{margin:0!important;}
+.left-main-list .group-item article{margin-bottom:40px!important;}
+.left-main-list .item .title a:hover{text-decoration: none}
+.left-main-list .item .title a{margin:0;font-size:20px;line-height:24px;}
+.left-main-list .text{float:left;width:100%;text-align:justify;}
+.pagination_wrap{float:left;width:100%;margin-top:20px;margin-bottom:20px;height:62px;border-top:0;text-align:center;line-height:62px;}
+.pagination_wrap a{font-size:14px;color:#307df1;border:1px solid #307df1;padding:7px 13px;margin-left:2px;font-family:Roboto-Bold;}
+.jp-current{background:#307df1;color:#fefefe!important;border:1px solid #307df1!important;}

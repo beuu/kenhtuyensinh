@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use phpDocumentor\Reflection\Types\Null_;
 
 class Post extends Model
 {
     use SoftDeletes;
     protected $fillable = ['id','title','image','cid','uid','description','body','feature','public','viewcount','index_seo','meta_title','keywords','mdescription','created_at','updated_at','deleted_at'];
     public function slugs(){
-        return $this->belongsTo('App\Models\Slug','id','refid');
+        return $this->belongsTo('App\Models\Slug','id','refid')->whereNull('deleted_at');
     }
 
     public function users()

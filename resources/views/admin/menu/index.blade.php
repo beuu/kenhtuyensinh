@@ -5,7 +5,6 @@
 <?php
 $currentUrl = url()->current();
 ?>
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 <link href="{{asset('menu/style.css')}}" rel="stylesheet">
 <div id="hwpwrap">
 	<div class="custom-wp-admin wp-admin wp-core-ui js   menu-max-depth-0 nav-menus-php auto-fold admin-bar">
@@ -83,7 +82,7 @@ $currentUrl = url()->current();
 															<div class="customlinkdiv" id="customlinkdiv">
                                 <div class="row">
                                   <div class="col-md-12">
-                                          <select onchange="val()" name="label" id="label" width="100%">
+                                          <select onchange="val()" class="form-control" name="label" id="label" width="100%">
                                             <option value="">Chọn danh mục</option>
                                             @foreach ($cate as $item)
                                       <option value="{{ $item->title}}" hidden-attr="{{ "/".$item->slugs->slug}}">{{ $item->title}}</option>
@@ -93,7 +92,7 @@ $currentUrl = url()->current();
                                   <div class="col-md-12">
                                     <p class="button-controls">
 
-                                      <a  href="#" onclick="addcustommenucate()"  class="btn btn-success"  >Add</a>
+                                      <a  href="#" onclick="addcustommenucate()"  class="btn btn-success"  >Thêm</a>
                                       <span class="spinner" id="spincustomu"></span>
                                     </p>
                                   </div>
@@ -109,49 +108,6 @@ $currentUrl = url()->current();
 
 								</div>
                 @endif
-                {{-- Page --}}
-                @if(request()->has('menu')  && !empty(request()->input("menu")))
-								<div id="menu-settings-column" class="metabox-holder">
-
-									<div class="clear"></div>
-
-									<form id="nav-menu-meta" action="" class="nav-menu-meta" method="post" enctype="multipart/form-data">
-										<div id="side-sortables" class="accordion-container">
-											<ul class="outer-border">
-												<li class="control-section accordion-section  open add-page" id="add-page">
-													<h3 class="accordion-section-title hndle" tabindex="0">Trang<span class="screen-reader-text">Press return or enter to expand</span></h3>
-													<div class="accordion-section-content ">
-														<div class="inside">
-															<div class="customlinkdiv" id="customlinkdiv">
-                                <div class="row">
-                                  <div class="col-md-12">
-                                          <select onchange="val()" name="label" id="labelp" width="100%">
-                                            <option value="">Chọn Trang</option>
-                                            @foreach ($page as $item)
-                                      <option value="{{ $item->title}}" hidden-attr="{{"/".$item->slugs->slug}}">{{ $item->title}}</option>
-                                        @endforeach
-                                      </select>
-                                  </div>
-                                  <div class="col-md-12">
-                                    <p class="button-controls">
-
-                                      <a  href="#" onclick="addcustommenupage()"  class="btn btn-success"  >Add</a>
-                                      <span class="spinner" id="spincustomu"></span>
-                                    </p>
-                                  </div>
-                                </div>
-															</div>
-														</div>
-													</div>
-												</li>
-
-											</ul>
-										</div>
-									</form>
-
-								</div>
-                @endif
-                {{-- end page --}}
             </div>
             {{-- end md3 --}}
             <div class="col-md-9">

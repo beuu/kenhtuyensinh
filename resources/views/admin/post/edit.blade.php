@@ -92,7 +92,7 @@
                                 </div>
                             </div>
 
-
+                            <input type="hidden" name="slugs[id]" value="{{ $data2->slugs->id }}">
                             <div
                                 class="row form-group{{ $errors->has('mdescription') ? ' has-error' : '' }}">
                                 <div class="col-md-2">

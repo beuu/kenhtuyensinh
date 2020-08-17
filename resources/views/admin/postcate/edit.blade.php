@@ -157,7 +157,7 @@
                                             <div class="col-md-12">
                                                 <label for="body" class="control-label">Body</label>
                                             </div>
-
+                                            <input type="hidden" name="slugs[id]" value="{{ $data->slugs->id }}">
 
                                             <div class="col-md-12">
                         <textarea id="body" rows="7" name="body"

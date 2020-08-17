@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Category\CreateRequest;
+use App\Http\Requests\Admin\Category\UpdateRequest;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -10,8 +12,6 @@ use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Repositories\Slug\SlugRepositoryInterface;
 use Illuminate\View\View;
 use Yajra\DataTables\DataTables;
-use Illuminate\Http\Response;
-use Illuminate\Validation\ValidationException;
 
 class CategoryController extends Controller
 {
@@ -38,7 +38,6 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $data = $this->cateRepository->with('slugs')->orderBy('id','DESC')->get();
-        //dd($data);
         if ($request->ajax()) {
 
             return Datatables::of($data)
@@ -83,16 +82,11 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param CreateRequest $request
      * @return RedirectResponse
-     * @throws ValidationException
      */
-    public function store(Request $request)
+    public function store(CreateRequest $request)
     {
-            $this->validate($request, [
-                'title' => 'required',
-                'slug' => 'required|unique:slugs',
-            ]);
         $input = $request->except('_token','slug','type');
         $data = $this->cateRepository->insertGetId($input);
         $input['refid'] = $data;
@@ -133,29 +127,25 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
+     * @param UpdateRequest $request
      * @param int $id
      * @return RedirectResponse
-     * @throws ValidationException
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRequest $request, $id)
     {
         $data = $this->cateRepository->find($id);
         $slug = $this->repoSlug->where('refid',$id);
-        $this->validate($request, [
-            'title' => 'required',
-            'slug' => 'required|unique:slugs,slug,'.$slug->id ,
-        ]);
-        $inputs = $request->except('slug','type','_token','_method' );
+        $inputs = $request->except('slug','slugs','type','_token','_method' );
         $request->index_seo == NULL ? ($inputs['index_seo'] = 0) : ($inputs['index_seo'] = 1);
         $this->cateRepository->update($id,$inputs);
-        //dd($inputs);
-
-        $slug->updateOrCreate([
-            'slug'=>$request->slug,
-            'type'=>$request->type,
-            'refid'=>$id
-        ]);
+        $rslug = $request->only('slug','type');
+        $rslug['refid'] = $id;
+        if ($slug->slug != $request->slug){
+            $data->slugs()->delete();
+            $this->repoSlug->create($rslug);
+        }else {
+            $this->repoSlug->update($slug->id,$rslug);
+        }
 
         return back()
             ->with('success','Sửa danh mục thành công');
